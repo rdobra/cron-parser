@@ -1,37 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" total="6" passed="6">
+<testng-results skipped="0" failed="0" total="9" passed="9">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="645" started-at="2015-03-17T01:12:17Z" finished-at="2015-03-17T01:12:17Z">
+  <suite name="Default suite" duration-ms="176" started-at="2015-03-17T06:01:02Z" finished-at="2015-03-17T06:01:02Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="645" started-at="2015-03-17T01:12:17Z" finished-at="2015-03-17T01:12:17Z">
-      <class name="cz.cron.CronCheckerTest">
-        <test-method status="PASS" signature="testNickNames()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testNickNames" duration-ms="491" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+    <test name="Default test" duration-ms="176" started-at="2015-03-17T06:01:02Z" finished-at="2015-03-17T06:01:02Z">
+      <class name="cz.cron.field.FieldTest">
+        <test-method status="PASS" signature="testParseEnumeration()[pri:0, instance:cz.cron.field.FieldTest@58ceff1]" name="testParseEnumeration" duration-ms="39" started-at="2015-03-17T07:01:02Z" finished-at="2015-03-17T07:01:02Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testNickNames -->
-        <test-method status="PASS" signature="testWillRun()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRun" duration-ms="19" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+        </test-method> <!-- testParseEnumeration -->
+        <test-method status="PASS" signature="testParseEvery()[pri:0, instance:cz.cron.field.FieldTest@58ceff1]" name="testParseEvery" duration-ms="2" started-at="2015-03-17T07:01:02Z" finished-at="2015-03-17T07:01:02Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testWillRun -->
-        <test-method status="PASS" signature="testWillRunIntervalWithStep()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRunIntervalWithStep" duration-ms="5" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+        </test-method> <!-- testParseEvery -->
+        <test-method status="PASS" signature="testParseIncrement()[pri:0, instance:cz.cron.field.FieldTest@58ceff1]" name="testParseIncrement" duration-ms="6" started-at="2015-03-17T07:01:02Z" finished-at="2015-03-17T07:01:02Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testWillRunIntervalWithStep -->
-        <test-method status="PASS" signature="testWillRunMoreIntervals()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRunMoreIntervals" duration-ms="46" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+        </test-method> <!-- testParseIncrement -->
+        <test-method status="PASS" signature="testParseIncrementInterval()[pri:0, instance:cz.cron.field.FieldTest@58ceff1]" name="testParseIncrementInterval" duration-ms="1" started-at="2015-03-17T07:01:02Z" finished-at="2015-03-17T07:01:02Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testWillRunMoreIntervals -->
-        <test-method status="PASS" signature="testWillRunSundays()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRunSundays" duration-ms="11" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+        </test-method> <!-- testParseIncrementInterval -->
+        <test-method status="PASS" signature="testParseInterval()[pri:0, instance:cz.cron.field.FieldTest@58ceff1]" name="testParseInterval" duration-ms="1" started-at="2015-03-17T07:01:02Z" finished-at="2015-03-17T07:01:02Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testWillRunSundays -->
-        <test-method status="PASS" signature="testWillRunWeekDay()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRunWeekDay" duration-ms="9" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+        </test-method> <!-- testParseInterval -->
+        <test-method status="PASS" signature="testParseInvalidString()[pri:0, instance:cz.cron.field.FieldTest@58ceff1]" name="testParseInvalidString" duration-ms="1" started-at="2015-03-17T07:01:02Z" finished-at="2015-03-17T07:01:02Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testWillRunWeekDay -->
-      </class> <!-- cz.cron.CronCheckerTest -->
+        </test-method> <!-- testParseInvalidString -->
+        <test-method status="PASS" signature="testParseListOfIntervals()[pri:0, instance:cz.cron.field.FieldTest@58ceff1]" name="testParseListOfIntervals" duration-ms="2" started-at="2015-03-17T07:01:02Z" finished-at="2015-03-17T07:01:02Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testParseListOfIntervals -->
+        <test-method status="PASS" signature="testParseMonthEnumeration()[pri:0, instance:cz.cron.field.FieldTest@58ceff1]" name="testParseMonthEnumeration" duration-ms="6" started-at="2015-03-17T07:01:02Z" finished-at="2015-03-17T07:01:02Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testParseMonthEnumeration -->
+        <test-method status="PASS" signature="testParseMonthInterval()[pri:0, instance:cz.cron.field.FieldTest@58ceff1]" name="testParseMonthInterval" duration-ms="10" started-at="2015-03-17T07:01:02Z" finished-at="2015-03-17T07:01:02Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testParseMonthInterval -->
+      </class> <!-- cz.cron.field.FieldTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
