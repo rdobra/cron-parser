@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite hostname="Radmila-PC" name="cz.cron.CronCheckerTest" tests="10" failures="0" timestamp="16 Mar 2015 20:12:18 GMT" time="0.368" errors="0">
+  <testcase name="testWillRunIntervalWithStep" time="0.283" classname="cz.cron.CronCheckerTest"/>
+  <testcase name="testWillRunSundays" time="0.011" classname="cz.cron.CronCheckerTest"/>
+  <testcase name="testParseEnumeration" time="0.001" classname="cz.cron.field.FieldTest"/>
+  <testcase name="testParseEvery" time="0.001" classname="cz.cron.field.FieldTest"/>
+  <testcase name="testParseIncrement" time="0.001" classname="cz.cron.field.FieldTest"/>
+  <testcase name="testParseIncrementInterval" time="0.001" classname="cz.cron.field.FieldTest"/>
+  <testcase name="testParseInterval" time="0.001" classname="cz.cron.field.FieldTest"/>
+  <testcase name="testParseListOfIntervals" time="0.0" classname="cz.cron.field.FieldTest"/>
+  <testcase name="testParseMonthEnumeration" time="0.001" classname="cz.cron.field.FieldTest"/>
+  <testcase name="testParseMonthInterval" time="0.001" classname="cz.cron.field.FieldTest"/>
+</testsuite>

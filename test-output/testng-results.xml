@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="6" passed="6">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="645" started-at="2015-03-17T01:12:17Z" finished-at="2015-03-17T01:12:17Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="645" started-at="2015-03-17T01:12:17Z" finished-at="2015-03-17T01:12:17Z">
+      <class name="cz.cron.CronCheckerTest">
+        <test-method status="PASS" signature="testNickNames()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testNickNames" duration-ms="491" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testNickNames -->
+        <test-method status="PASS" signature="testWillRun()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRun" duration-ms="19" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testWillRun -->
+        <test-method status="PASS" signature="testWillRunIntervalWithStep()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRunIntervalWithStep" duration-ms="5" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testWillRunIntervalWithStep -->
+        <test-method status="PASS" signature="testWillRunMoreIntervals()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRunMoreIntervals" duration-ms="46" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testWillRunMoreIntervals -->
+        <test-method status="PASS" signature="testWillRunSundays()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRunSundays" duration-ms="11" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testWillRunSundays -->
+        <test-method status="PASS" signature="testWillRunWeekDay()[pri:0, instance:cz.cron.CronCheckerTest@18ef96]" name="testWillRunWeekDay" duration-ms="9" started-at="2015-03-17T02:12:17Z" finished-at="2015-03-17T02:12:17Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testWillRunWeekDay -->
+      </class> <!-- cz.cron.CronCheckerTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
