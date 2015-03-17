@@ -18,6 +18,12 @@ public class FieldTest {
 	private final static Logger LOG = Logger.getLogger(FieldTest.class.getName());
 
 	@Test
+	public void testParseInvalidString() throws CronParserException{
+		Hour h = new Hour("a");
+		Assert.assertNull(h.getAllowedValues());
+	}
+	
+	@Test
 	public void testParseEvery() throws CronParserException{
 		Hour h = new Hour("*");
 		Assert.assertTrue(getAreListEquals(Arrays.asList(0,1,2,3,4,5,6,7,8,9,10,

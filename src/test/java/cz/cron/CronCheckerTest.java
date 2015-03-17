@@ -25,6 +25,10 @@ public class CronCheckerTest {
 				getDateAsTimestampString(2012, 01, 02, 00, 00), 
 				getDateAsTimestampString(2012, 01, 02, 12, 10)));
 		
+		Assert.assertTrue(CronChecker.getWillRun("5 0 1 1 *", 
+				getDateAsTimestampString(2012, 01, 02, 00, 00), 
+				getDateAsTimestampString(2013, 01, 02, 12, 10)));
+		
 		//every 1st at 14:15
 		Assert.assertTrue(CronChecker.getWillRun("15 14 1 * *", 
 				getDateAsTimestampString(2012, 01, 01, 00, 00), 
