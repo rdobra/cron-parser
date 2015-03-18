@@ -13,7 +13,7 @@ Requires java 8.
 
 <h2>Implementation description</h2>
 
-Cron string looks like <minutes> <hours> <day of month> <month> <day of week> (for more detailed description see http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5)
+Cron string looks like <code> &lt;minutes&gt; &lt;hours&gt; &lt;day of month&gt; &lt;month&gt; &lt;day of week&gt; </code> (for more detailed description see http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5)
 
 <h3>Algorithm</h3>
 
