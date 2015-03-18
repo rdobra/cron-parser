@@ -1,11 +1,15 @@
 package cz.cron;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.joda.time.Days;
+import org.joda.time.Hours;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Months;
+import org.joda.time.Years;
 
 import cz.cron.fileds.DayOfMonth;
 import cz.cron.fileds.DayOfWeek;
@@ -80,14 +84,13 @@ public class Cron {
 		//years - will be used below
 		int startYear = dateStart.getYear();
 		int endYear = dateEnd.getYear();
-		Long yearsInterval = ChronoUnit.YEARS.between(dateStart, dateEnd);
-		
+		int yearsInterval =  Years.yearsBetween(dateStart, dateEnd).getYears();
 		//are months between allowed?
-		int startMonth = dateStart.getMonthValue();
-		int endMonth = dateEnd.getMonthValue();
-		long monthsInterval = ChronoUnit.HOURS.between(dateStart, dateEnd);
-		List<Integer> monthsBetween = getValuesBetween(month.getAllowedValues(), startMonth, endMonth, monthsInterval,
-				yearsInterval.intValue(), month.getTo());
+		int startMonth = dateStart.getMonthOfYear();
+		int endMonth = dateEnd.getMonthOfYear();
+		int monthsInterval = Months.monthsBetween(dateStart, dateEnd).getMonths();
+		List<Integer> monthsBetween = getValuesBetween(month.getAllowedValues(), startMonth, endMonth, 
+				yearsInterval, month.getTo());
 		if(!getIsBetween(month.getAllowedValues(), startMonth, endMonth, startYear, endYear, 
 				new ArrayList<Integer>(),false, -1, false)){
 			LOG.debug("months are not betweed allowed");
@@ -96,8 +99,8 @@ public class Cron {
 		
 		//are days between allowed 
 		//by days must be dayOfWeek or dayOfMonth null
-		int dayOfWeekStart = dateStart.getDayOfWeek().getValue();
-		int dayOfWeekEnd = dateEnd.getDayOfWeek().getValue();
+		int dayOfWeekStart = dateStart.getDayOfWeek();
+		int dayOfWeekEnd = dateEnd.getDayOfWeek();
 		
 		int dayOfMonthStart = dateStart.getDayOfMonth();
 		int dayOfMonthEnd = dateEnd.getDayOfMonth();
@@ -121,41 +124,42 @@ public class Cron {
 			dayMax = dayOfMonth.getTo();
 		}
 		
-		long daysInterval = ChronoUnit.DAYS.between(dateStart, dateEnd);
+		int daysInterval = Days.daysBetween(dateStart, dateEnd).getDays();
 		
-		List<Integer> daysBetween = getValuesBetween(allowedDayValues, dayStart, dayEnd,daysInterval,
+		List<Integer> daysBetween = getValuesBetween(allowedDayValues, dayStart, dayEnd,
 				monthsBetween.size(), dayMax);
 		
 		if(!getIsBetween(allowedDayValues, dayStart, dayEnd, startMonth, endMonth, monthsBetween,
-				monthsInterval > month.getTo(), month.getTo(), yearsInterval >= 1)){
+
+				monthsInterval >= month.getTo(), month.getTo(), yearsInterval >= 1)){
 			LOG.debug("days are not betweed allowed");
 			return false;
 		}
 		
 		
 		//are hours in allowed interval
-		int hourStart = dateStart.getHour();
-		int hourEnd = dateEnd.getHour();
+		int hourStart = dateStart.getHourOfDay();
+		int hourEnd = dateEnd.getHourOfDay();
 		
-		long hoursInterval = ChronoUnit.HOURS.between(dateStart, dateEnd);
+		int hoursInterval = Hours.hoursBetween(dateStart, dateEnd).getHours();
 		
-		List<Integer> hoursBetween = getValuesBetween(hour.getAllowedValues(), hourStart, hourEnd,hoursInterval,
+		List<Integer> hoursBetween = getValuesBetween(hour.getAllowedValues(), hourStart, hourEnd,
 				daysBetween.size(), hour.getTo());
 		
 		if(!getIsBetween(hour.getAllowedValues(), hourStart, hourEnd, dayStart, dayEnd, daysBetween, 
-				daysInterval > dayMax, dayMax, monthsInterval >= 1)){
+				daysInterval >= dayMax, dayMax, monthsInterval >= 1)){
 			LOG.debug("hours are not betweed allowed");
 			return false;
 		}
 		
 		
 		//are minutes allowed?
-		int minuteStart = dateStart.getMinute();
-		int minuteEnd = dateEnd.getMinute();
+		int minuteStart = dateStart.getMinuteOfHour();
+		int minuteEnd = dateEnd.getMinuteOfHour();
 
 		
 		if(!getIsBetween(minute.getAllowedValues(), minuteStart, minuteEnd, hourStart, hourEnd, hoursBetween, 
-				hoursInterval > hour.getTo(),hour.getTo(), daysInterval >= 1)){
+				hoursInterval >= hour.getTo(),hour.getTo(), daysInterval >= 1)){
 			LOG.debug("minutes are not betweed allowed");
 			return false;
 		}
@@ -172,7 +176,8 @@ public class Cron {
 	 * @param max - max allowed value 
 	 * @return allowed values which are between <code>from</code> and <code>to</code>
 	 */
-	private List<Integer> getValuesBetween(List<Integer> allowedValues, int valFrom, int valTo, long interval, int prevSize, int max){
+	private List<Integer> getValuesBetween(List<Integer> allowedValues, int valFrom, int valTo,
+			int prevSize, int max){
 		List<Integer> valuesBetween = new ArrayList<Integer>();
 		
 		if(valFrom == valTo){

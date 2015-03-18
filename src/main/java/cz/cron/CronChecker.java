@@ -1,10 +1,9 @@
 package cz.cron;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+
 
 import org.apache.log4j.Logger;
+import org.joda.time.LocalDateTime;
 
 /**
  * 
@@ -47,8 +46,8 @@ public class CronChecker {
 		
 		long fromLong = Long.parseLong(from);
 		Long toLong = Long.parseLong(to);
-		LocalDateTime dtFrom =  LocalDateTime.ofInstant(Instant.ofEpochMilli(fromLong), ZoneId.systemDefault());
-		LocalDateTime dtTo =  LocalDateTime.ofInstant(Instant.ofEpochMilli(toLong), ZoneId.systemDefault());
+		LocalDateTime dtFrom = new LocalDateTime(fromLong);
+		LocalDateTime dtTo =  new LocalDateTime(toLong);
 		
 		if(dtTo.isBefore(dtFrom)){
 			throw new CronParserException("date to is before date from");

@@ -96,7 +96,7 @@ public class CronCheckerTest {
 				getDateAsTimestampString(2015, 03, 15, 01, 00)));
 		
 		//saturday
-		Assert.assertFalse(CronChecker.getWillRun("5 4 * * sun", 
+		Assert.assertFalse(CronChecker.getWillRun("5 4 * * Sun", 
 				getDateAsTimestampString(2015, 03, 14, 00, 00), 
 				getDateAsTimestampString(2015, 03, 14, 10, 00)));
 		
@@ -147,6 +147,23 @@ public class CronCheckerTest {
 		Assert.assertFalse(CronChecker.getWillRun("0 22 7-9,10-15 * *", 
 				getDateAsTimestampString(2015, 02, 16, 00, 00), 
 				getDateAsTimestampString(2015, 03, 5, 12, 10)));
+		
+		
+		Assert.assertTrue(CronChecker.getWillRun("30 */4 * * Mon-Fri", 
+				getDateAsTimestampString(2015, 3, 13, 0, 0), 
+				getDateAsTimestampString(2015, 3, 14, 12, 10)));
+		
+		Assert.assertFalse(CronChecker.getWillRun("30 */4 * * Mon-Fri", 
+				getDateAsTimestampString(2015, 3, 14, 0, 0), 
+				getDateAsTimestampString(2015, 3, 14, 12, 10)));
+		
+		Assert.assertFalse(CronChecker.getWillRun("30 */4 * * Mon-Fri", 
+				getDateAsTimestampString(2015, 3, 16, 2, 30), 
+				getDateAsTimestampString(2015, 3, 16, 3, 10)));
+		
+		Assert.assertTrue(CronChecker.getWillRun("30 */4 * * Mon-Fri", 
+				getDateAsTimestampString(2015, 3, 16, 2, 30), 
+				getDateAsTimestampString(2015, 3, 16, 5, 10)));
 	
 	}
 	
