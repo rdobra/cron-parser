@@ -9,8 +9,6 @@ For examples of inputs and results see <tt>CronCheckerTest</tt>.
 
 Allowed cron string values are from http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5
 
-Requires java 8.
-
 <h2>Implementation description</h2>
 
 Cron string looks like <code> &lt;minutes&gt; &lt;hours&gt; &lt;day of month&gt; &lt;month&gt; &lt;day of week&gt; </code> (for more detailed description see http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5)
