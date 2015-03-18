@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  * 
  * expected arguments:
  * 
- * <cron string> <from timestamp> <to timestamp>
+ * <code><cron string> <from timestamp> <to timestamp></code>
  * 
  * 
  * 
@@ -25,8 +25,8 @@ public class CronChecker {
 	
 	public static void main(String[] args) {
 		if (args.length != 3){
-		LOG.error("bad number of arguments\n" + "usage: <cron string> <from timestamp> <to timestamp>");
-		return;	
+			LOG.info("bad number of arguments\n" + "usage: <cron string> <from timestamp> <to timestamp>");
+			return;	
 		}
 		
 		try {
@@ -49,6 +49,10 @@ public class CronChecker {
 		Long toLong = Long.parseLong(to);
 		LocalDateTime dtFrom =  LocalDateTime.ofInstant(Instant.ofEpochMilli(fromLong), ZoneId.systemDefault());
 		LocalDateTime dtTo =  LocalDateTime.ofInstant(Instant.ofEpochMilli(toLong), ZoneId.systemDefault());
+		
+		if(dtTo.isBefore(dtFrom)){
+			throw new CronParserException("date to is before date from");
+		}
 		
 		return getWillRun(cronString, dtFrom, dtTo);
 		

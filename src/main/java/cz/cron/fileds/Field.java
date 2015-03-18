@@ -22,25 +22,35 @@ public abstract class Field {
 	private final String cronString;
 	
 
-	public Field(int from, int to, String cronString) {
+	/**
+	 * 
+	 * @param from - min allowed value by this field
+	 * @param to - max allowed value by this field
+	 * @param cronString - cron string for this field
+	 * @throws CronParserException - error when parsing <code>cronString</code>
+	 * 
+	 */
+	public Field(int from, int to, String cronString) throws CronParserException {
 		this.from = from;
 		this.to = to;
 		this.cronString = cronString == null ? "" : cronString.toUpperCase();
 		
+		init();
 	}
 
 	/**
 	 * 
 	 * @return allowed values
-	 * @throws CronParserException
+	 * 
 	 */
-	public List<Integer> getAllowedValues() throws CronParserException {
-		
+	public List<Integer> getAllowedValues() {
+		return allowedValues;
+	}
+	
+	private void init() throws CronParserException{
 		if(allowedValues == null){
 			allowedValues = getAllowedValuesFromString(cronString);
 		}
-		
-		return allowedValues;
 	}
 
 	protected boolean getIsNumber(String cronString){
@@ -92,14 +102,7 @@ public abstract class Field {
 		}else if(getIsNumberInterval(cronString)){
 			return getAllowedValuesFromStringInterval(cronString);
 		}else if(getIsNumber(cronString)){
-
-			try{
-				Integer intVal = Integer.parseInt(cronString);
-				return Arrays.asList(intVal);
-			}catch(NumberFormatException ex) {
-				//it shoudn't come (because of meaning getIsNumber())
-				LOG.error(ex.getMessage(), ex);
-			}
+			return getAllowedSingleNumber(cronString);
 		}else if(getIsIncrement(cronString)) {
 			return getAllowedValuesFromIncrement(cronString);
 		}
@@ -107,6 +110,22 @@ public abstract class Field {
 			return getAllowedValuesFromIntervalIncrement(cronString);
 		}
 			
+		return null;
+	}
+	
+	private List<Integer> getAllowedSingleNumber(String cronString) throws CronParserException{
+		try{
+			Integer intVal = Integer.parseInt(cronString);
+			
+			if(intVal > this.to){
+				throw new CronParserException("the value " + intVal + " is grater than max allowed value for this field");
+			}
+			
+			return Arrays.asList(intVal);
+		}catch(NumberFormatException ex) {
+			//it shoudn't come (because of meaning getIsNumber())
+			LOG.error(ex.getMessage(), ex);
+		}
 		return null;
 	}
 	
@@ -152,8 +171,8 @@ public abstract class Field {
 		String[] vals = cronString.split("/");
 		
 		if(vals.length != 2){
-			//TODO
-			throw new CronParserException("");
+
+			throw new CronParserException("bad count of parameters during parsing string " + cronString);
 		}
 		
 		try{
@@ -185,7 +204,12 @@ public abstract class Field {
 		return getAllowedValuesFromStringInterval(interval,step);
 	}
 	
-	protected List<Integer> createIntegerInterval(int from, int to, int step){
+	protected List<Integer> createIntegerInterval(int from, int to, int step) throws CronParserException{
+		
+		if(to > this.to){
+			throw new CronParserException("the upper boundary " + to + " is grater than max allowed value for this field");
+		}
+		
 		List<Integer> vals = new ArrayList<Integer>();
 		for(int i  = from; i <= to; i = i+step){
 			vals.add(i);

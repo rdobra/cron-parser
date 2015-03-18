@@ -86,10 +86,10 @@ public class Cron {
 		int startMonth = dateStart.getMonthValue();
 		int endMonth = dateEnd.getMonthValue();
 		long monthsInterval = ChronoUnit.HOURS.between(dateStart, dateEnd);
-		List<Integer> monthsBetween = getValuesBetween(month.getAllowedValues(), startMonth, endMonth, 
+		List<Integer> monthsBetween = getValuesBetween(month.getAllowedValues(), startMonth, endMonth, monthsInterval,
 				yearsInterval.intValue(), month.getTo());
 		if(!getIsBetween(month.getAllowedValues(), startMonth, endMonth, startYear, endYear, 
-				new ArrayList<Integer>(),false, -1)){
+				new ArrayList<Integer>(),false, -1, false)){
 			LOG.debug("months are not betweed allowed");
 			return false;
 		}
@@ -121,15 +121,17 @@ public class Cron {
 			dayMax = dayOfMonth.getTo();
 		}
 		
-		List<Integer> daysBetween = getValuesBetween(allowedDayValues, dayStart, dayEnd, monthsBetween.size(), dayMax);
+		long daysInterval = ChronoUnit.DAYS.between(dateStart, dateEnd);
+		
+		List<Integer> daysBetween = getValuesBetween(allowedDayValues, dayStart, dayEnd,daysInterval,
+				monthsBetween.size(), dayMax);
 		
 		if(!getIsBetween(allowedDayValues, dayStart, dayEnd, startMonth, endMonth, monthsBetween,
-				monthsInterval > month.getTo(), month.getTo())){
+				monthsInterval > month.getTo(), month.getTo(), yearsInterval >= 1)){
 			LOG.debug("days are not betweed allowed");
 			return false;
 		}
 		
-		long daysInterval = ChronoUnit.DAYS.between(dateStart, dateEnd);
 		
 		//are hours in allowed interval
 		int hourStart = dateStart.getHour();
@@ -137,10 +139,11 @@ public class Cron {
 		
 		long hoursInterval = ChronoUnit.HOURS.between(dateStart, dateEnd);
 		
-		List<Integer> hoursBetween = getValuesBetween(hour.getAllowedValues(), hourStart, hourEnd, daysBetween.size(), hour.getTo());
+		List<Integer> hoursBetween = getValuesBetween(hour.getAllowedValues(), hourStart, hourEnd,hoursInterval,
+				daysBetween.size(), hour.getTo());
 		
 		if(!getIsBetween(hour.getAllowedValues(), hourStart, hourEnd, dayStart, dayEnd, daysBetween, 
-				daysInterval > dayMax, dayMax)){
+				daysInterval > dayMax, dayMax, monthsInterval >= 1)){
 			LOG.debug("hours are not betweed allowed");
 			return false;
 		}
@@ -151,7 +154,8 @@ public class Cron {
 		int minuteEnd = dateEnd.getMinute();
 
 		
-		if(!getIsBetween(minute.getAllowedValues(), minuteStart, minuteEnd, hourStart, hourEnd, hoursBetween, hoursInterval > hour.getTo(),hour.getTo())){
+		if(!getIsBetween(minute.getAllowedValues(), minuteStart, minuteEnd, hourStart, hourEnd, hoursBetween, 
+				hoursInterval > hour.getTo(),hour.getTo(), daysInterval >= 1)){
 			LOG.debug("minutes are not betweed allowed");
 			return false;
 		}
@@ -168,7 +172,7 @@ public class Cron {
 	 * @param max - max allowed value 
 	 * @return allowed values which are between <code>from</code> and <code>to</code>
 	 */
-	private List<Integer> getValuesBetween(List<Integer> allowedValues, int valFrom, int valTo, int prevSize, int max){
+	private List<Integer> getValuesBetween(List<Integer> allowedValues, int valFrom, int valTo, long interval, int prevSize, int max){
 		List<Integer> valuesBetween = new ArrayList<Integer>();
 		
 		if(valFrom == valTo){
@@ -176,9 +180,11 @@ public class Cron {
 		}
 		
 		int to = valTo;
+		
 		if(prevSize > 0){
 			to = max;
 		}
+		
 		for(int i = valFrom; i <= to;i++){
 			if (allowedValues.contains(i)){
 				valuesBetween.add(i);
@@ -188,7 +194,7 @@ public class Cron {
 		
 		//to is smaller then from -> adding the allowed values from 0 to the beginning of next interval (e.g. days from next month)
 		//eg. from 20.3. - 2.4. -> adds allowed values from 0 to 2
-		if(valTo < valFrom){
+		if(valTo < valFrom || prevSize > 0){
 			for (int i = 0; i <= valTo; i++) {
 				if (allowedValues.contains(i)) {
 					valuesBetween.add(i);
@@ -199,39 +205,72 @@ public class Cron {
 		return valuesBetween;
 	}
 
-	private boolean getIsBetween(List<Integer> allowedValues, int from, int to, int prevFrom, 
-			int prevTo, List<Integer> valuesBetween, boolean biggerMax, int max){
+	/**
+	 * <p>Method for determining if the allowed values are between the interval.
+	 * Method needs to know about borders of previous fields.</p>
+	 * 
+	 * <p>In next lines "previous field" means the part of date which is the next bigger unit (eg. by minutes is it hour).</p>
+	 * 
+	 * @param allowedValues - list of allowed values
+	 * @param from  - start of interval
+	 * @param to - end of interval
+	 * @param prevStart - start of interval of previous field 
+	 * @param prevEnd - end of interval of previous field
+	 * @param valuesBetween - values of previous field which were between interval
+	 * @param biggerMax - boolean, true if the size of interval previous field is grater than previous field's max value
+	 * @param max - maximal allowed value of previous field
+	 * @param precPrecBigger - true, if the preceding preceding interval was grater then 0
+	 * 
+	 * @return true, if allowed values are within interval between <code>from</code> and <code>to</code> 
+	 */
+
+	private boolean getIsBetween(List<Integer> allowedValues, int from, int to, int prevStart, 
+			int prevEnd, List<Integer> valuesBetween, boolean biggerMax, int max, boolean precPrecBigger){
 		
+		//values between ares grater then 2 -> it must be within the interval
 		if(valuesBetween.size() >= 2){
 			return true;
 		}
 		
+		//size of previous interval is bigger than max value -> it must be within the interval 
 		if(biggerMax){
 			return true;
 		}
 		
 		int f = from <= to ? from : to;
 		int t = to >= from ? to : from;
-		
-		int fP = prevFrom <= prevTo ? prevFrom : prevTo;
-		int tP = prevTo >= prevFrom ? prevTo : prevFrom;
 
-		if(valuesBetween.size() == 1 && valuesBetween.get(0).equals(prevFrom)){
+		//only one value is between and the value equals start of the interval -> 
+		//test if there is some allowed value grater than the start of the interval
+		if(valuesBetween.size() == 1 && valuesBetween.get(0).equals(prevStart)){
 			for(Integer v : allowedValues){
 				if(v >= from){
 					return true;
 				}
 			}
 			return false;
-		}else if(valuesBetween.size() == 1 && valuesBetween.get(0).equals(prevTo)){
+			
+		//only one value is between and the value equals end of the interval -> 
+		//test if there is some allowed value smaller than the end of the interval	
+		}else if(valuesBetween.size() == 1 && valuesBetween.get(0).equals(prevEnd)){
 			for(Integer v : allowedValues){
 				if(v <= to){
 					return true;
 				}
 			}
 			return false;
-		}else if(valuesBetween.size() == 1 && ((prevTo >= prevFrom && valuesBetween.get(0) < prevTo && valuesBetween.get(0) > prevFrom) || (prevTo < prevFrom && valuesBetween.get(0) > 0 && valuesBetween.get(0) < max)) ){
+		//other cases when there is only one value between:
+		// previous end is after previous start -> value between must be between
+		// previous end is before previous start -> value between must grater then 0 and smaller than max 
+		// preceding preceding interval was bigger than 0 
+		}else if(valuesBetween.size() == 1 && 
+				((prevEnd >= prevStart && valuesBetween.get(0) < prevEnd && valuesBetween.get(0) > prevStart) 
+				|| (prevEnd < prevStart && valuesBetween.get(0) > 0 && valuesBetween.get(0) < max) 
+				|| precPrecBigger) ){
 			return true;
+			
+		//test if is there any allowed value that is grater than the start of the interval and smaller 
+		//than the end of the interval
 		}else{
 			for(Integer v : allowedValues){
 				if( v >= f && v <= t){

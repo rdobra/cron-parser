@@ -5,18 +5,20 @@ import java.util.List;
 import cz.cron.CronParserException;
 
 /**
+ * field for representing months
  * 
- * @author Jiří Nohavec
+ * @author rdobra
  *
  */
 public class Month  extends Field {
 	private final static Integer FROM = 1;
 	private final static Integer TO = 12;
 
-	public Month(String cronString) {
+	public Month(String cronString) throws CronParserException {
 		super(FROM, TO, cronString);
 	}
 
+	@Override
 	public List<Integer> getAllowedValuesFromString(String cronString) throws CronParserException{
 		return super.getAllowedValuesFromString(convertNamesToIntegers(cronString));
 	}

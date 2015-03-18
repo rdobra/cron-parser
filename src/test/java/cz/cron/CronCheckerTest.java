@@ -15,9 +15,7 @@ public class CronCheckerTest {
 		
 		return "" + cFrom.getTimeInMillis();
 	}
-	
 
-	
 	@Test
 	public void testWillRun() throws CronParserException{
 
@@ -35,8 +33,20 @@ public class CronCheckerTest {
 				getDateAsTimestampString(2012, 01, 02, 12, 10)));
 		
 		Assert.assertFalse(CronChecker.getWillRun("15 14 1 * *", 
-				getDateAsTimestampString(2012, 01, 03, 00, 00), 
-				getDateAsTimestampString(2012, 01, 04, 12, 10)));
+				getDateAsTimestampString(2012, 1, 3, 9, 0), 
+				getDateAsTimestampString(2012, 1, 4, 12, 10)));
+		
+		Assert.assertTrue(CronChecker.getWillRun("0 0 12 * *", 
+				getDateAsTimestampString(2015, 2, 15, 10, 5), 
+				getDateAsTimestampString(2015, 3, 16, 9, 10)));
+		
+		Assert.assertTrue(CronChecker.getWillRun("0 0 12 * *", 
+				getDateAsTimestampString(2015, 2, 20, 10, 5), 
+				getDateAsTimestampString(2015, 3, 14, 9, 10)));
+		
+		Assert.assertFalse(CronChecker.getWillRun("0 0 12 * *", 
+				getDateAsTimestampString(2015, 2, 15, 10, 5), 
+				getDateAsTimestampString(2015, 3, 2, 12, 10)));
 
 		
 	}
@@ -64,9 +74,9 @@ public class CronCheckerTest {
 	@Test
 	public void testWillRunIntervalWithStep() throws CronParserException{
 		
-//		Assert.assertTrue(CronChecker.getWillRun("0 22 2-10/2 * *", 
-//				getDateAsTimestampString(2015, 02, 24, 00, 00), 
-//				getDateAsTimestampString(2015, 03, 6, 12, 10)));
+		Assert.assertTrue(CronChecker.getWillRun("0 22 2-10/2 * *", 
+				getDateAsTimestampString(2015, 02, 24, 00, 00), 
+				getDateAsTimestampString(2015, 03, 6, 12, 10)));
 		
 		Assert.assertTrue(CronChecker.getWillRun("0 22 2-10/2 * *", 
 				getDateAsTimestampString(2015, 02, 24, 00, 00), 
@@ -138,5 +148,80 @@ public class CronCheckerTest {
 				getDateAsTimestampString(2015, 02, 16, 00, 00), 
 				getDateAsTimestampString(2015, 03, 5, 12, 10)));
 	
+	}
+	
+	@Test
+	public void testWillRunEnumeration() throws CronParserException{
+		
+		Assert.assertTrue(CronChecker.getWillRun("10,20,30 * * * *", 
+				getDateAsTimestampString(2015, 02, 24, 00, 10), 
+				getDateAsTimestampString(2015, 02, 24, 00, 10)));
+		
+		Assert.assertTrue(CronChecker.getWillRun("10,20,30 * * * *", 
+				getDateAsTimestampString(2015, 02, 24, 00, 10), 
+				getDateAsTimestampString(2015, 02, 24, 00, 20)));
+		
+		Assert.assertTrue(CronChecker.getWillRun("10,20,30 * * * *", 
+				getDateAsTimestampString(2015, 02, 24, 00, 5), 
+				getDateAsTimestampString(2015, 02, 24, 00, 15)));
+		
+		Assert.assertFalse(CronChecker.getWillRun("10,20,30 * * * *", 
+				getDateAsTimestampString(2015, 02, 24, 00, 12), 
+				getDateAsTimestampString(2015, 02, 24, 00, 15)));
+		
+		Assert.assertFalse(CronChecker.getWillRun("10,20,30 * * * *", 
+				getDateAsTimestampString(2015, 02, 24, 00, 40), 
+				getDateAsTimestampString(2015, 02, 24, 00, 50)));
+		
+		
+	}
+	
+	/* =========== wrong, invalid inputs ========== */
+	@Test(expectedExceptions = CronParserException.class)
+	public void testDayOfMonthAndDayOfWeekSet() throws CronParserException{
+		Assert.assertFalse(CronChecker.getWillRun("1 1 1 1 1", 
+				getDateAsTimestampString(2015, 02, 24, 00, 12), 
+				getDateAsTimestampString(2015, 02, 24, 00, 15)));
+		
+	}
+	
+	@Test(expectedExceptions = CronParserException.class)
+	public void testTooBigDayOfWeek () throws CronParserException{
+		
+		Assert.assertFalse(CronChecker.getWillRun("1 1 * 3 9", 
+				getDateAsTimestampString(2015, 02, 24, 00, 12), 
+				getDateAsTimestampString(2015, 02, 24, 00, 15)));
+	}
+	
+	@Test(expectedExceptions = CronParserException.class)
+	public void testTooBigDayOfMonth () throws CronParserException{
+		
+		Assert.assertFalse(CronChecker.getWillRun("1 1 40 3 *", 
+				getDateAsTimestampString(2015, 02, 24, 00, 12), 
+				getDateAsTimestampString(2015, 02, 24, 00, 15)));
+	}
+	
+	@Test(expectedExceptions = CronParserException.class)
+	public void testTooBigMonth () throws CronParserException{
+		
+		Assert.assertFalse(CronChecker.getWillRun("1 1 * 18 *", 
+				getDateAsTimestampString(2015, 02, 24, 00, 12), 
+				getDateAsTimestampString(2015, 02, 24, 00, 15)));
+	}
+	
+	@Test(expectedExceptions = CronParserException.class)
+	public void testTooBigMinute () throws CronParserException{
+		
+		Assert.assertFalse(CronChecker.getWillRun("80 1 40 2 *", 
+				getDateAsTimestampString(2015, 02, 24, 00, 12), 
+				getDateAsTimestampString(2015, 02, 24, 00, 15)));
+	}
+	
+	@Test(expectedExceptions = CronParserException.class)
+	public void testWrongNumberOfArguments () throws CronParserException{
+		
+		Assert.assertFalse(CronChecker.getWillRun("1 1 ", 
+				getDateAsTimestampString(2015, 02, 24, 00, 12), 
+				getDateAsTimestampString(2015, 02, 24, 00, 15)));
 	}
 }

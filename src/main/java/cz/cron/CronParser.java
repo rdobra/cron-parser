@@ -34,6 +34,11 @@ public class CronParser {
 		Minute minute = new Minute(fields[0]);
 		Hour hour = new Hour(fields[1]);
 		DayOfMonth dayOfMonth = null;
+		
+		if(!fields[2].equals("*") && !fields[4].equals("*")){
+			throw new CronParserException("only one field for days could be set");
+		}
+		
 		if(!fields[2].equals("*") || fields[4].equals("*")){
 			dayOfMonth = new DayOfMonth(fields[2]);
 		}

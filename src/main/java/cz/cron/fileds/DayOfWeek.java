@@ -13,10 +13,11 @@ public class DayOfWeek  extends Field {
 	private final static Integer FROM = 1;
 	private final static Integer TO = 7;
 
-	public DayOfWeek(String cronString) {
+	public DayOfWeek(String cronString) throws CronParserException {
 		super(FROM, TO, cronString);
 	}
 
+	@Override
 	public List<Integer> getAllowedValuesFromString(String cronString) throws CronParserException{
 		//Saturday could be both 0 and 7 -> we will use only one value - 7
 		String normalizedCronString = convertNamesToIntegers(cronString).replaceAll("0", "7");
