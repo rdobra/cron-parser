@@ -19,7 +19,7 @@ Cron string looks like <minutes> <hours> <day of month> <month> <day of week> (f
 
 Cron string is split into fields. For each field are the allowed values found - we are looking for values which satisfy the condition from input cron string and are withing the bounds allowed for the field. So each field contains list of allowed values (represents as integers). 
 
-Having this allowed values we can start deciding if the an event will take place during given interval or not. We go from year parts of date to minutes and compare the part of given dates with allowed values - we decide if allowed values are within bound or not. If yes, we can move to next part of date.
+Having this allowed values we can start deciding if the an event will take place during given interval or not. We go from year parts of date to minutes and compare the part of given dates with allowed values for this field - we decide if allowed values are within bound or not. If yes, we can move to next part of date.
 
 <h3>Important classes</h3>
 
