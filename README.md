@@ -5,6 +5,8 @@ Running - run the main class CronChecker.  Expected arguments:
 
 <pre> &lt;cron string&gt; &lt;from timestamp&gt; &lt;to timestamp&gt;</pre>
 
-Cron string allowed values are from http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5
+For examples of inputs and results see <tt>CronCheckerTest</tt>.
 
-requires java 8
+Allowed cron string values are from http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5
+
+Requires java 8.
