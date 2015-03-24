@@ -4,16 +4,12 @@ import cz.cron.CronParserException;
 
 /**
  * Field for minutes.
- *
- * @author rdobra
- *
  */
-public class Minute extends Field{
+public class Minute extends Field {
+    private static final Integer FROM = 0;
+    private static final Integer TO = 59;
 
-	private static final Integer FROM = 0;
-	private static final Integer TO = 59;
-
-	public Minute(String cronString) throws CronParserException {
-		super(FROM, TO,cronString);
-	}
+    public Minute(String cronString) throws CronParserException {
+        super(FROM, TO, cronString);
+    }
 }
